@@ -48,7 +48,7 @@
             android:layout_centerHorizontal="true"
             android:fontFamily="sans-serif-medium"
             android:paddingTop="16dp"
-            android:text="Add items to populate the list"
+            android:text="Add items to populate the list by hitting the pink button"
             android:textAppearance="?android:textAppearanceMedium"
             android:textAlignment="center"/>
 

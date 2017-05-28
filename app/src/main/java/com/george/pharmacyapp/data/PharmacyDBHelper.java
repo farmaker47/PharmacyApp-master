@@ -14,16 +14,15 @@ public class PharmacyDBHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     //Creating the constructor
-    public PharmacyDBHelper(Context context){
-        super(context,DATABASE_NAME,null,DATABASE_VERSION);
-
+    public PharmacyDBHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
-        // Create a String that contains the SQL statement to create the pets table
-        String SQL_CREATE_PHARMACY_TABLE =  "CREATE TABLE " + PharmacyContract.PharmacyEntry.TABLE_NAME + " ("
+        // Create a String that contains the SQL statement to create the products table
+        String SQL_CREATE_PHARMACY_TABLE = "CREATE TABLE " + PharmacyContract.PharmacyEntry.TABLE_NAME + " ("
                 + PharmacyContract.PharmacyEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + PharmacyContract.PharmacyEntry.COLUMN_NAME + " TEXT NOT NULL, "
                 + PharmacyContract.PharmacyEntry.COLUMN_QUANTITY + " INTEGER, "

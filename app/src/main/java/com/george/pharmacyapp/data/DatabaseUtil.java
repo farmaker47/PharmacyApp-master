@@ -16,12 +16,13 @@ public class DatabaseUtil {
 
     //______________________________________________________________________________________________
 
-    //todo -> rename the database according to your application
+    //name of the database according to the application
     private final static String DATABASE_NAME = "pharmacy.db";
-    //example WhatsApp :  /data/data/com.whatsapp/databases/pet.db
-    private final static String FOLDER_EXTERNAL_DIRECTORY = Environment.getExternalStorageDirectory() + "/Pets-Database";
+    //example george :  /data/data/com.george/databases/pharmacy.db.db
+    private final static String FOLDER_EXTERNAL_DIRECTORY = Environment.getExternalStorageDirectory() + "/Pharmacy-Database";
 
     //______________________________________________________________________________________________
+
     /**
      * Call this method from any activity in your app (
      * for example ->    DatabaseUtil.copyDatabaseToExtStg(MainActivity.this);
@@ -29,23 +30,24 @@ public class DatabaseUtil {
     public static void copyDatabaseToExtStg(Context ctx) {
         //external storage file
         File externalDirectory = new File(FOLDER_EXTERNAL_DIRECTORY);
-        if(!externalDirectory.exists())
+        if (!externalDirectory.exists())
             externalDirectory.mkdirs();
         File toFile = new File(externalDirectory, DATABASE_NAME);
         //internal storage file
         //https://developer.android.com/reference/android/content/Context.html#getDatabasePath(java.lang.String)
         File fromFile = ctx.getDatabasePath(DATABASE_NAME);
-        //example WhatsApp :  /data/data/com.whatsapp/databases/pet.db
+        //example george :  /data/data/com.george/databases/pet.db
         if (fromFile.exists())
             copy(fromFile, toFile);
     }
 
 
     //______________________________________________________________________________________________ Utility function
+
     /**
      * @param fromFile source location
-     * @param toFile destination location
-     * copy file from 1 location to another
+     * @param toFile   destination location
+     *                 copy file from 1 location to another
      */
     static void copy(File fromFile, File toFile) {
         try {
@@ -54,8 +56,10 @@ public class DatabaseUtil {
             FileOutputStream os = new FileOutputStream(toFile);
             FileChannel dst = os.getChannel();
             dst.transferFrom(src, 0, src.size());
-            src.close();    is.close();
-            dst.close();    os.close();
+            src.close();
+            is.close();
+            dst.close();
+            os.close();
         } catch (Exception e) {
             //todo in case of exception
         }

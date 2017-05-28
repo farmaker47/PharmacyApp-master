@@ -10,7 +10,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.ShareCompat;
 import android.support.v4.content.CursorLoader;
@@ -29,7 +28,6 @@ import android.widget.Toast;
 
 import com.george.pharmacyapp.data.DatabaseUtil;
 import com.george.pharmacyapp.data.PharmacyContract;
-import com.george.pharmacyapp.data.PharmacyDBHelper;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -37,75 +35,87 @@ import java.io.InputStream;
 
 public class EditPharmacyItem extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    //Initializing the views
     private EditText mEditName, mEditQuantity, mEditPrice;
     private ImageView mImage;
     private ImageButton mMinusButton, mPlusButton;
-    private Button mOrderButton,mDeleteButton;
+    private Button mOrderButton, mDeleteButton;
 
-
+    //Giving the loader a number so to call it at initialization
     private final int PHARMACY_EDIT_LOADER = 0;
+
+    //Making two final static integers and giving a number to be used in starting activity for result and for sending an e-mail
     private static final int PICK_IMAGE_REQUEST = 0;
     private static final int SEND_MAIL_REQUEST = 1;
 
+    //A private Uri to determine whether we are in edit or savng a new product
     private Uri mCurrentPharmacyUri;
 
+    //Log tag to use it for debug
     private static final String LOG_TAG = EditPharmacyItem.class.getSimpleName();
 
+    //Uri thatis used vi ImageView to load the imagefrom gallery
     private Uri imageUri;
 
-    private PharmacyDBHelper mdbHelper;
-
+    //Making quantity a global variable
     private int quantity = 0;
 
-    private String editName,editPrice,editQuantity,editImage;
+    //Global private strings
+    private String editName, editPrice, editQuantity, editImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_pharmacy_item);
 
+        //Finding,casting and storing the views to variables
         mEditName = (EditText) findViewById(R.id.editTextName);
         mEditQuantity = (EditText) findViewById(R.id.editTextQuantity);
         mEditPrice = (EditText) findViewById(R.id.editTextPrice);
         mImage = (ImageView) findViewById(R.id.image);
-
-        mOrderButton = (Button)findViewById(R.id.orderButton);
-        mDeleteButton = (Button)findViewById(R.id.deleteButton);
-
+        mOrderButton = (Button) findViewById(R.id.orderButton);
+        mDeleteButton = (Button) findViewById(R.id.deleteButton);
         mMinusButton = (ImageButton) findViewById(R.id.minusButton);
         mPlusButton = (ImageButton) findViewById(R.id.plusButton);
 
+        //Getting the intent and the data from the MainActivity
         Intent intent = getIntent();
         mCurrentPharmacyUri = intent.getData();
 
+        //Determine if the the EditActivity is on edit or saving a new product
         if (mCurrentPharmacyUri == null) {
             setTitle("Add a Product");
             // Invalidate the options menu, so the "Delete" menu option can be hidden.
-            // (It doesn't make sense to delete a pet that hasn't been created yet.)
+            // (It doesn't make sense to delete a product that hasn't been created yet.)
             invalidateOptionsMenu();
+            //Also making the deleteButton invisible
             mDeleteButton.setVisibility(View.INVISIBLE);
 
         } else {
             setTitle("Edit Product");
+            //Initializing the Loader in edit product mode
             getSupportLoaderManager().initLoader(PHARMACY_EDIT_LOADER, null, this);
         }
 
+        //Setting an onClickListener at ImageView to get image from gallery
         mImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getImageFromGallery();
             }
         });
-        /*Log.e(LOG_TAG,mCurrentPharmacyUri.toString());*/
 
+        //Setting an onClickListener at button that decreases quantity
         mMinusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String editTextCurrentQuantity = mEditQuantity.getText().toString().trim();
-                if (editTextCurrentQuantity.equals("")|| editTextCurrentQuantity.equals("0")){
-                    quantity=0;
+                //if quantity is 0 then stop so not to get into negative numbers
+                if (editTextCurrentQuantity.equals("") || editTextCurrentQuantity.equals("0")) {
+                    quantity = 0;
                     return;
-                }else{
+                } else {
+                    //if quantity is above 0 then decrease by one
                     quantity = Integer.parseInt(editTextCurrentQuantity);
                     quantity -= 1;
                 }
@@ -114,20 +124,23 @@ public class EditPharmacyItem extends AppCompatActivity implements LoaderManager
             }
         });
 
+        //Setting an onClickListener at button that increases quantity
         mPlusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String editTextCurrentQuantity = mEditQuantity.getText().toString().trim();
-                if (editTextCurrentQuantity.equals("")){
-                    quantity=0;
-                }else{
+                if (editTextCurrentQuantity.equals("")) {
+                    quantity = 0;
+                } else {
                     quantity = Integer.parseInt(editTextCurrentQuantity);
                 }
                 quantity += 1;
+                //method to display the quantity to the editText
                 display(quantity);
             }
         });
 
+        //Setting an onClickListener to the orderButton
         mOrderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -135,6 +148,7 @@ public class EditPharmacyItem extends AppCompatActivity implements LoaderManager
             }
         });
 
+        //Setting an onClickListener to the deleteButton
         mDeleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -142,12 +156,10 @@ public class EditPharmacyItem extends AppCompatActivity implements LoaderManager
             }
         });
 
-        mdbHelper = new PharmacyDBHelper(this);
-
-
     }
 
-    private void display(int quantity){
+    //method to display the quantity to the editText
+    private void display(int quantity) {
         mEditQuantity.setText(String.valueOf(quantity));
     }
 
@@ -162,7 +174,7 @@ public class EditPharmacyItem extends AppCompatActivity implements LoaderManager
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        // If this is a new pet, hide the "Delete" menu item.
+        // If this is a new product, hide the "Delete" menu item.
         if (mCurrentPharmacyUri == null) {
             MenuItem menuItem = menu.findItem(R.id.action_delete);
             menuItem.setVisible(false);
@@ -177,11 +189,14 @@ public class EditPharmacyItem extends AppCompatActivity implements LoaderManager
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+        //delete function at delete button in options menu
         if (id == R.id.action_delete) {
             showDeleteConfirmationDialog();
             return true;
         }
+
+        //save function of save button
+        //In addition we store the db to an externalfile of phone's memory because some phones are not rooted
         if (id == R.id.action_save) {
             insertProduct();
             DatabaseUtil.copyDatabaseToExtStg(this);
@@ -191,6 +206,7 @@ public class EditPharmacyItem extends AppCompatActivity implements LoaderManager
         return super.onOptionsItemSelected(item);
     }
 
+    //Starting the loader
     @Override
     public Loader onCreateLoader(int i, Bundle bundle) {
 
@@ -214,7 +230,7 @@ public class EditPharmacyItem extends AppCompatActivity implements LoaderManager
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         if (cursor.moveToFirst()) {
-            // Find the columns of pet attributes that we're interested in
+            // Find the columns of product attributes that we're interested in
             int nameColumnIndex = cursor.getColumnIndex(PharmacyContract.PharmacyEntry.COLUMN_NAME);
             int quantityColumnIndex = cursor.getColumnIndex(PharmacyContract.PharmacyEntry.COLUMN_QUANTITY);
             int priceColumnIndex = cursor.getColumnIndex(PharmacyContract.PharmacyEntry.COLUMN_PRICE);
@@ -242,8 +258,10 @@ public class EditPharmacyItem extends AppCompatActivity implements LoaderManager
 
     }
 
+    //Insert a product or update one
     private void insertProduct() {
 
+        //determine if the activity is in editing or saving mode
         if (mCurrentPharmacyUri == null) {
             String nameString = mEditName.getText().toString().trim();
             String quantityString = mEditQuantity.getText().toString().trim();
@@ -268,14 +286,15 @@ public class EditPharmacyItem extends AppCompatActivity implements LoaderManager
             // Show a toast message depending on whether or not the insertion was successful
             if (uri == null) {
                 // If the new content URI is null, then there was an error with insertion.
-                Toast.makeText(this, "Failed",
+                Toast.makeText(this, "Fail saving the product",
                         Toast.LENGTH_SHORT).show();
             } else {
                 // Otherwise, the insertion was successful and we can display a toast.
-                Toast.makeText(this, "Successii",
+                Toast.makeText(this, "Success saving the product",
                         Toast.LENGTH_SHORT).show();
             }
         } else {
+            //if uri from MainActivity is not null then Update product
             String nameString = mEditName.getText().toString().trim();
             String quantityString = mEditQuantity.getText().toString().trim();
             String priceString = mEditPrice.getText().toString().trim();
@@ -298,87 +317,33 @@ public class EditPharmacyItem extends AppCompatActivity implements LoaderManager
             // Show a toast message depending on whether or not the update was successful.
             if (rowsAffected == 0) {
                 // If no rows were affected, then there was an error with the update.
-                Toast.makeText(this, "fail",
+                Toast.makeText(this, "Fail updating the product",
                         Toast.LENGTH_SHORT).show();
             } else {
                 // Otherwise, the update was successful and we can display a toast.
-                Toast.makeText(this, "Success",
+                Toast.makeText(this, "Success updating the product",
                         Toast.LENGTH_SHORT).show();
             }
         }
 
-
-        // Otherwise this is an EXISTING pet, so update the pet with content URI: mCurrentPetUri
-        // and pass in the new ContentValues. Pass in null for the selection and selection args
-        // because mCurrentPetUri will already identify the correct row in the database that
-        // we want to modify.
-        /*if(mCurrentPharmacyUri==null){
-            // Read from input fields
-            // Use trim to eliminate leading or trailing white space
-            String nameString = mEditName.getText().toString().trim();
-            String quantityString = mEditQuantity.getText().toString().trim();
-            String priceString = mEditPrice.getText().toString().trim();
-            String imageString =
-
-
-
-            if (mCurrentPetUri == null &&
-                    TextUtils.isEmpty(nameString) && TextUtils.isEmpty(breedString) &&
-                    TextUtils.isEmpty(weightString) && mGender == PetEntry.GENDER_UNKNOWN) {return;}
-
-
-            // Create a ContentValues object where column names are the keys,
-            // and pet attributes from the editor are the values.
-            ContentValues values = new ContentValues();
-            values.put(PetEntry.COLUMN_PET_NAME, nameString);
-            values.put(PetEntry.COLUMN_PET_BREED, breedString);
-            values.put(PetEntry.COLUMN_PET_GENDER, mGender);
-
-            int weight = 0;
-            if (!TextUtils.isEmpty(weightString)) {
-                weight = Integer.parseInt(weightString);
-            }
-            values.put(PetEntry.COLUMN_PET_WEIGHT, weight);
-
-            // Insert a new row for pet in the database, returning the ID of that new row.
-            Uri newUri = getContentResolver().insert(PetEntry.CONTENT_URI, values);
-
-            // Show a toast message depending on whether or not the insertion was successful
-            if (newUri == null) {
-                // If the new content URI is null, then there was an error with insertion.
-                Toast.makeText(this, getString(R.string.editor_insert_pet_failed),
-                        Toast.LENGTH_SHORT).show();
-            } else {
-                // Otherwise, the insertion was successful and we can display a toast.
-                Toast.makeText(this, getString(R.string.editor_insert_pet_successful),
-                        Toast.LENGTH_SHORT).show();
-            }
-        }else {*/
-
-
-
-
-
-
-      /*  }*/
-
     }
 
+    //Creating a confirmation delete dialog
     private void showDeleteConfirmationDialog() {
         // Create an AlertDialog.Builder and set the message, and click listeners
         // for the postivie and negative buttons on the dialog.
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("DELETE PRODUCT");
-        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+        builder.setMessage("DELETE PRODUCT ??");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                // User clicked the "Delete" button, so delete the pet.
+                // User clicked the "Delete" button, so delete the product.
                 deleteProduct();
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked the "Cancel" button, so dismiss the dialog
-                // and continue editing the pet.
+                // and continue editing the product.
                 if (dialog != null) {
                     dialog.dismiss();
                 }
@@ -390,6 +355,7 @@ public class EditPharmacyItem extends AppCompatActivity implements LoaderManager
         alertDialog.show();
     }
 
+    //Method to delete a product
     private void deleteProduct() {
 
         int rowsAffected = getContentResolver().delete(mCurrentPharmacyUri, null, null);
@@ -397,22 +363,22 @@ public class EditPharmacyItem extends AppCompatActivity implements LoaderManager
         // Show a toast message depending on whether or not the update was successful.
         if (rowsAffected == 0) {
             // If no rows were affected, then there was an error with the update.
-            Toast.makeText(this, "fail",
+            Toast.makeText(this, "Fail  deleting the product",
                     Toast.LENGTH_SHORT).show();
         } else {
             // Otherwise, the update was successful and we can display a toast.
-            Toast.makeText(this, "Success",
+            Toast.makeText(this, "Success deleting the product",
                     Toast.LENGTH_SHORT).show();
         }
 
         finish();
-
     }
 
-
+    //Method to select image from gallery
     private void getImageFromGallery() {
         Intent intent;
 
+        //determine if mobile phone is below sdk 19
         if (Build.VERSION.SDK_INT < 19) {
             intent = new Intent(Intent.ACTION_GET_CONTENT);
         } else {
@@ -421,6 +387,7 @@ public class EditPharmacyItem extends AppCompatActivity implements LoaderManager
         }
 
         intent.setType("image/*");
+        //Starting the gallery to chooose image
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
 
@@ -439,11 +406,13 @@ public class EditPharmacyItem extends AppCompatActivity implements LoaderManager
                 imageUri = data.getData();
                 Log.i(LOG_TAG, "Uri: " + imageUri.toString());
 
+                //Setting the image to the imageview depending the specific uri
                 mImage.setImageBitmap(getBitmapFromUri(imageUri));
             }
         }
     }
 
+    //Method to create bitmap from uri
     public Bitmap getBitmapFromUri(Uri uri) {
 
         if (uri == null || uri.toString().isEmpty())
@@ -494,14 +463,14 @@ public class EditPharmacyItem extends AppCompatActivity implements LoaderManager
         }
     }
 
-    private void sendEmail(){
+    //Methd to sen an e-mail to the supplier
+    private void sendEmail() {
         if (editName != null) {
             String subject = "Order details";
             String stream = "Hello Sir! Please send us the below order \n\n"
                     + "Name:\t" + editName + "\n"
                     + "Quantity:\t" + editQuantity + "\n"
-                    + "Price:\t" + editPrice + "\n"
-                    ;
+                    + "Price:\t" + editPrice + "\n";
 
             Intent shareIntent = ShareCompat.IntentBuilder.from(this)
                     .setStream(imageUri)
@@ -524,7 +493,7 @@ public class EditPharmacyItem extends AppCompatActivity implements LoaderManager
             startActivityForResult(Intent.createChooser(shareIntent, "Share with"), SEND_MAIL_REQUEST);
 
         } else {
-            Toast.makeText(this,"No details available",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "No details available", Toast.LENGTH_SHORT).show();
             return;
         }
     }
