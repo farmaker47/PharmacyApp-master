@@ -88,7 +88,7 @@ public class EditPharmacyItem extends AppCompatActivity implements LoaderManager
 
         //Determine if the the EditActivity is on edit or saving a new product
         if (mCurrentPharmacyUri == null) {
-            setTitle("Add a Product");
+            setTitle(getResources().getString(R.string.addAProduct));
             // Invalidate the options menu, so the "Delete" menu option can be hidden.
             // (It doesn't make sense to delete a product that hasn't been created yet.)
             invalidateOptionsMenu();
@@ -96,7 +96,7 @@ public class EditPharmacyItem extends AppCompatActivity implements LoaderManager
             mDeleteButton.setVisibility(View.INVISIBLE);
 
         } else {
-            setTitle("Edit Product");
+            setTitle(getResources().getString(R.string.editProduct));
             //Initializing the Loader in edit product mode
             getSupportLoaderManager().initLoader(PHARMACY_EDIT_LOADER, null, this);
         }
@@ -318,11 +318,11 @@ public class EditPharmacyItem extends AppCompatActivity implements LoaderManager
             // Show a toast message depending on whether or not the insertion was successful
             if (uri == null) {
                 // If the new content URI is null, then there was an error with insertion.
-                Toast.makeText(this, "Fail saving the product",
+                Toast.makeText(this, getResources().getString(R.string.failSaving),
                         Toast.LENGTH_SHORT).show();
             } else {
                 // Otherwise, the insertion was successful and we can display a toast.
-                Toast.makeText(this, "Success saving the product",
+                Toast.makeText(this, getResources().getString(R.string.successSaving),
                         Toast.LENGTH_SHORT).show();
             }
         } else {
@@ -349,11 +349,11 @@ public class EditPharmacyItem extends AppCompatActivity implements LoaderManager
             // Show a toast message depending on whether or not the update was successful.
             if (rowsAffected == 0) {
                 // If no rows were affected, then there was an error with the update.
-                Toast.makeText(this, "Fail updating the product",
+                Toast.makeText(this, getResources().getString(R.string.failUpdating),
                         Toast.LENGTH_SHORT).show();
             } else {
                 // Otherwise, the update was successful and we can display a toast.
-                Toast.makeText(this, "Success updating the product",
+                Toast.makeText(this, getResources().getString(R.string.successUpdating),
                         Toast.LENGTH_SHORT).show();
             }
         }
@@ -365,14 +365,14 @@ public class EditPharmacyItem extends AppCompatActivity implements LoaderManager
         // Create an AlertDialog.Builder and set the message, and click listeners
         // for the postivie and negative buttons on the dialog.
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("DELETE PRODUCT ??");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setMessage(getResources().getString(R.string.dialogDeleteProduct));
+        builder.setPositiveButton(getResources().getString(R.string.dialogYes), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked the "Delete" button, so delete the product.
                 deleteProduct();
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getResources().getString(R.string.dialogCancel), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked the "Cancel" button, so dismiss the dialog
                 // and continue editing the product.
@@ -395,11 +395,11 @@ public class EditPharmacyItem extends AppCompatActivity implements LoaderManager
         // Show a toast message depending on whether or not the update was successful.
         if (rowsAffected == 0) {
             // If no rows were affected, then there was an error with the update.
-            Toast.makeText(this, "Fail  deleting the product",
+            Toast.makeText(this, getResources().getString(R.string.failDeleting),
                     Toast.LENGTH_SHORT).show();
         } else {
             // Otherwise, the update was successful and we can display a toast.
-            Toast.makeText(this, "Success deleting the product",
+            Toast.makeText(this, getResources().getString(R.string.successDeleting),
                     Toast.LENGTH_SHORT).show();
         }
 
@@ -502,7 +502,7 @@ public class EditPharmacyItem extends AppCompatActivity implements LoaderManager
             String stream = "Hello Sir! Please send us the below order \n\n"
                     + "Name:\t" + editName + "\n"
                     + "Quantity:\t" + editQuantity + "\n"
-                    + "Price:\t" + editPrice + "\n";
+                    + "Price:\t" + editPrice + "\t€\n";
 
             Intent shareIntent = ShareCompat.IntentBuilder.from(this)
                     .setStream(imageUri)
@@ -525,7 +525,7 @@ public class EditPharmacyItem extends AppCompatActivity implements LoaderManager
             startActivityForResult(Intent.createChooser(shareIntent, "Share with"), SEND_MAIL_REQUEST);
 
         } else {
-            Toast.makeText(this, "No details available", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.no_details), Toast.LENGTH_SHORT).show();
             return;
         }
     }

@@ -7,4 +7,27 @@
 
     <!-- Label for editor overflow menu option that deletes the current pet [CHAR LIMIT=20] -->
     <string name="action_delete">Delete</string>
+    <string name="addAProduct">Add a Product</string>
+    <string name="editProduct">Edit Product</string>
+    <string name="failSaving">Fail saving the product</string>
+    <string name="successSaving">Success saving the product</string>
+    <string name="failUpdating">Fail updating the product</string>
+    <string name="successUpdating">Success updating the product</string>
+    <string name="failDeleting">Fail deleting the product</string>
+    <string name="successDeleting">Success deleting the product</string>
+    <string name="dialogDeleteProduct">DELETE PRODUCT ??</string>
+    <string name="dialogDeleteAllProducts">DELETE ALL PRODUCTS ??</string>
+    <string name="dialogYes">Yes</string>
+    <string name="dialogCancel">Cancel</string>
+    <string name="no_details">No details available</string>
+    <string name="no_items_delete">No items to delete</string>
+    <string name="name">Name:\t\t</string>
+    <string name="price">Price:\t\t</string>
+    <string name="quantity">Quantity:\t\t</string>
+    <string name="notQueryUnknown">Cannot query unknown\t</string>
+    <string name="requiresName">Product requires name</string>
+    <string name="requiresPrice">Product requires price</string>
+    <string name="requiresQuantity">Product requires quantity</string>
+    <string name="requiresImage">Product requires image</string>
+
 </resources>

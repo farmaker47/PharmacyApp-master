@@ -133,25 +133,25 @@ public class PharmacyProvider extends ContentProvider {
         String name = values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_NAME);
         if (name.equals("")) {
             //Sanity check for name
-            Toast.makeText(getContext(), "Product requires a name", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), getContext().getResources().getString(R.string.requiresName), Toast.LENGTH_SHORT).show();
         }
 
         String price = values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_PRICE);
         if (price.equals("")) {
             //Sanity check for price
-            Toast.makeText(getContext(), "Product requires a price", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), getContext().getResources().getString(R.string.requiresPrice), Toast.LENGTH_LONG).show();
         }
 
         String quantity = values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_QUANTITY);
         if (quantity.equals("")) {
             //Sanity check for quantity
-            Toast.makeText(getContext(), "Product requires quantity", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), getContext().getResources().getString(R.string.requiresQuantity), Toast.LENGTH_LONG).show();
         }
 
         String image = values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_IMAGE);
         if (image.equals("")) {
             //Sanity check for image
-            Toast.makeText(getContext(), "Product requires image", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), getContext().getResources().getString(R.string.requiresImage), Toast.LENGTH_LONG).show();
         }
 
         //Product has to have all the information to complete insertion
@@ -245,7 +245,7 @@ public class PharmacyProvider extends ContentProvider {
         if (values.containsKey(PharmacyContract.PharmacyEntry.COLUMN_NAME)) {
             name = values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_NAME);
             if (name.equals("")) {
-                Toast.makeText(getContext(), "Product requires name", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getContext().getResources().getString(R.string.requiresName), Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -254,7 +254,7 @@ public class PharmacyProvider extends ContentProvider {
         if (values.containsKey(PharmacyContract.PharmacyEntry.COLUMN_PRICE)) {
             price = values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_PRICE);
             if (price.equals("")) {
-                Toast.makeText(getContext(), "No Prici", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getContext().getResources().getString(R.string.requiresPrice), Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -263,7 +263,7 @@ public class PharmacyProvider extends ContentProvider {
         if (values.containsKey(PharmacyContract.PharmacyEntry.COLUMN_QUANTITY)) {
             quantity = values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_QUANTITY);
             if (quantity.equals("")) {
-                Toast.makeText(getContext(), "No quantiti", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getContext().getResources().getString(R.string.requiresQuantity), Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -272,7 +272,7 @@ public class PharmacyProvider extends ContentProvider {
         if (values.containsKey(PharmacyContract.PharmacyEntry.COLUMN_IMAGE)) {
             image = values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_IMAGE);
             if (image.equals("")) {
-                Toast.makeText(getContext(), "No Imagi", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getContext().getResources().getString(R.string.requiresImage), Toast.LENGTH_SHORT).show();
             }
         }
 

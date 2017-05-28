@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             //if there are no list items to show a toast and return.
             int itemCount = list.getAdapter().getCount();
             if (itemCount == 0) {
-                Toast.makeText(this, "No items to delete", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getResources().getString(R.string.no_items_delete), Toast.LENGTH_SHORT).show();
                 return true;
             } else {
                 showDeleteConfirmationDialog();
@@ -114,14 +114,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         // Create an AlertDialog.Builder and set the message, and click listeners
         // for the postivie and negative buttons on the dialog.
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("DELETE All PRODUCTS?");
-        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+        builder.setMessage(getResources().getString(R.string.dialogDeleteAllProducts));
+        builder.setPositiveButton(getResources().getString(R.string.dialogYes), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked the "Delete" button, so delete the product.
                 deleteProduct();
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getResources().getString(R.string.dialogCancel), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked the "Cancel" button, so dismiss the dialog
                 // and continue editing the product.
@@ -143,11 +143,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         // Show a toast message depending on whether or not the update was successful.
         if (rowsAffected == 0) {
             // If no rows were affected, then there was an error with the update.
-            Toast.makeText(this, "No items to delete!",
+            Toast.makeText(this, getResources().getString(R.string.no_items_delete),
                     Toast.LENGTH_SHORT).show();
         } else {
             // Otherwise, the update was successful and we can display a toast.
-            Toast.makeText(this, "Success",
+            Toast.makeText(this, getResources().getString(R.string.successDeleting),
                     Toast.LENGTH_SHORT).show();
         }
 
