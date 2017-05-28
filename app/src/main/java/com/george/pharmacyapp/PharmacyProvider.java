@@ -29,17 +29,17 @@ public class PharmacyProvider extends ContentProvider {
     public static final String LOG_TAG = PharmacyProvider.class.getSimpleName();
 
     /**
-     * Initialize the provider and the database helper object.
+     * Initialize the database helper object.
      */
     private PharmacyDBHelper mDbHelper;
 
     /**
-     * URI matcher code for the content URI for the pets table
+     * URI matcher code for the content URI for the products table
      */
     private static final int PRODUCT = 100;
 
     /**
-     * URI matcher code for the content URI for a single pet in the pets table
+     * URI matcher code for the content URI for a single product in the product table
      */
     private static final int PRODUCT_ID = 101;
 
@@ -92,13 +92,13 @@ public class PharmacyProvider extends ContentProvider {
                 selection = PharmacyContract.PharmacyEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
 
-                // This will perform a query on the pets table where the _id equals 3 to return a
+                // This will perform a query on the products table where the _id equals a number to return a
                 // Cursor containing that row of the table.
                 cursor = database.query(PharmacyContract.PharmacyEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
                 break;
             default:
-                throw new IllegalArgumentException("cannot query unknown " + uri);
+                throw new IllegalArgumentException("Cannot query unknown " + uri);
         }
 
         //if the uri changes,we know we have to update cursor
@@ -132,32 +132,34 @@ public class PharmacyProvider extends ContentProvider {
 
         String name = values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_NAME);
         if (name.equals("")) {
-            /*throw new IllegalArgumentException("Product requires a name");*/
-            Toast.makeText(getContext(), "No Name", Toast.LENGTH_SHORT).show();
-
+            //Sanity check for name
+            Toast.makeText(getContext(), "Product requires a name", Toast.LENGTH_SHORT).show();
         }
 
         String price = values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_PRICE);
         if (price.equals("")) {
-            Toast.makeText(getContext(), "No Price", Toast.LENGTH_LONG).show();
-
+            //Sanity check for price
+            Toast.makeText(getContext(), "Product requires a price", Toast.LENGTH_LONG).show();
         }
 
         String quantity = values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_QUANTITY);
         if (quantity.equals("")) {
-            Toast.makeText(getContext(), "No Quantity", Toast.LENGTH_LONG).show();
+            //Sanity check for quantity
+            Toast.makeText(getContext(), "Product requires quantity", Toast.LENGTH_LONG).show();
         }
 
         String image = values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_IMAGE);
         if (image.equals("")) {
-            Toast.makeText(getContext(), "No Image", Toast.LENGTH_LONG).show();
+            //Sanity check for image
+            Toast.makeText(getContext(), "Product requires image", Toast.LENGTH_LONG).show();
         }
 
+        //Product has to have all the information to complete insertion
         if (image.equals("") || quantity.equals("") || price.equals("") || name.equals("")) {
             return null;
         }
 
-        // Insert the new pet with the given values
+        // Insert the new product with the given values
         long id = database.insert(PharmacyContract.PharmacyEntry.TABLE_NAME, null, values);
 
         // If the ID is -1, then the insertion failed. Log an error and return null.
@@ -170,7 +172,6 @@ public class PharmacyProvider extends ContentProvider {
         getContext().getContentResolver().notifyChange(uri, null);
         // Return the new URI with the ID (of the newly inserted row) appended at the end
         return ContentUris.withAppendedId(uri, id);
-
 
     }
 
@@ -219,7 +220,7 @@ public class PharmacyProvider extends ContentProvider {
             case PRODUCT:
                 return updateProduct(uri, contentValues, selection, selectionArgs);
             case PRODUCT_ID:
-                // For the PET_ID code, extract out the ID from the URI,
+                // For the PRODUCT_ID code, extract out the ID from the URI,
                 // so we know which row to update. Selection will be "_id=?" and selection
                 // arguments will be a String array containing the actual ID.
                 selection = PharmacyContract.PharmacyEntry._ID + "=?";
@@ -231,55 +232,25 @@ public class PharmacyProvider extends ContentProvider {
         }
     }
 
-    /**
-     * Update pets in the database with the given content values. Apply the changes to the rows
-     * specified in the selection and selection arguments (which could be 0 or 1 or more pets).
-     * Return the number of rows that were successfully updated.
-     */
+    //update products
     private int updateProduct(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-
-
-        ///working with no sanity
-        /*values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_NAME);
-        values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_QUANTITY);
-        values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_PRICE);
-        values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_IMAGE);
-
-        SQLiteDatabase database = mDbHelper.getWritableDatabase();
-
-        // Perform the update on the database and get the number of rows affected
-        int rowsUpdated = database.update(PharmacyContract.PharmacyEntry.TABLE_NAME, values, selection, selectionArgs);
-
-        // If 1 or more rows were updated, then notify all listeners that the data at the
-        // given URI has changed
-        if (rowsUpdated != 0) {
-            getContext().getContentResolver().notifyChange(uri, null);
-        }
-
-
-        // Returns the number of database rows affected by the update statement
-        return rowsUpdated;*/
-
-
-        ///////////////////////////
-        ///////////////////////////
-        //////////////////////////
-
 
         String name = "";
         String quantity = "";
         String price = "";
         String image = "";
 
-        // If the {@link PetEntry#COLUMN_PET_NAME} key is present,
+        // If the {@link PharmacyEntry#COLUMN_NAME} key is present,
         // check that the name value is not null.
         if (values.containsKey(PharmacyContract.PharmacyEntry.COLUMN_NAME)) {
             name = values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_NAME);
             if (name.equals("")) {
-                Toast.makeText(getContext(), "No Nami", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Product requires name", Toast.LENGTH_SHORT).show();
             }
         }
 
+        // If the {@link PharmacyEntry#COLUMN_PRICE} key is present,
+        // check that the price value is not null.
         if (values.containsKey(PharmacyContract.PharmacyEntry.COLUMN_PRICE)) {
             price = values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_PRICE);
             if (price.equals("")) {
@@ -287,6 +258,8 @@ public class PharmacyProvider extends ContentProvider {
             }
         }
 
+        // If the {@link PharmacyEntry#COLUMN_QUANTITY} key is present,
+        // check that the quantity value is not null.
         if (values.containsKey(PharmacyContract.PharmacyEntry.COLUMN_QUANTITY)) {
             quantity = values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_QUANTITY);
             if (quantity.equals("")) {
@@ -294,24 +267,22 @@ public class PharmacyProvider extends ContentProvider {
             }
         }
 
+        // If the {@link PharmacyEntry#COLUMN_IMAGE} key is present,
+        // check that the image value is not null.
         if (values.containsKey(PharmacyContract.PharmacyEntry.COLUMN_IMAGE)) {
             image = values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_IMAGE);
             if (image.equals("")) {
                 Toast.makeText(getContext(), "No Imagi", Toast.LENGTH_SHORT).show();
             }
         }
-       /* values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_NAME);
-        values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_QUANTITY);
-        values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_PRICE);
-        values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_IMAGE);*/
 
-        // If there are no values to update, then don't try to update the database
-        /*if (values.size() == 0) {
-            return 0;
-        }*/
-        if ( quantity.equals("") || price.equals("") || name.equals("")) {
+        //Allinformation has to be present to update product
+        //Because there is a sanity check for image presence and there is no method to delete the image from the imageview
+        // we dont add sanity check here(we assume there is an image already)
+        if (quantity.equals("") || price.equals("") || name.equals("")) {
             return 0;
         }
+
         // Otherwise, get writeable database to update the data
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
 
@@ -324,11 +295,9 @@ public class PharmacyProvider extends ContentProvider {
             getContext().getContentResolver().notifyChange(uri, null);
         }
 
-
         // Returns the number of database rows affected by the update statement
         return rowsUpdated;
 
     }
-
 
 }
