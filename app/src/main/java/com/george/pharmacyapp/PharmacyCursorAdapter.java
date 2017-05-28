@@ -43,9 +43,11 @@ public class PharmacyCursorAdapter extends CursorAdapter {
         TextView price = (TextView) listItemView.findViewById(R.id.price);
         Button salesButton = (Button) listItemView.findViewById(R.id.salesButton);
 
-        String nameProduct = cursor.getString(cursor.getColumnIndexOrThrow(PharmacyContract.PharmacyEntry.COLUMN_NAME));
+        final String nameProduct = cursor.getString(cursor.getColumnIndexOrThrow(PharmacyContract.PharmacyEntry.COLUMN_NAME));
         final String quantityProduct = cursor.getString(cursor.getColumnIndexOrThrow(PharmacyContract.PharmacyEntry.COLUMN_QUANTITY));
-        String priceProduct = cursor.getString(cursor.getColumnIndexOrThrow(PharmacyContract.PharmacyEntry.COLUMN_PRICE));
+        final String priceProduct = cursor.getString(cursor.getColumnIndexOrThrow(PharmacyContract.PharmacyEntry.COLUMN_PRICE));
+
+
 
         name.setText(nameProduct);
         quantity.setText(quantityProduct);
@@ -67,6 +69,9 @@ public class PharmacyCursorAdapter extends CursorAdapter {
 
                 ContentValues values = new ContentValues();
                 values.put(PharmacyContract.PharmacyEntry.COLUMN_QUANTITY, quaReduced);
+                values.put(PharmacyContract.PharmacyEntry.COLUMN_NAME, nameProduct);
+                values.put(PharmacyContract.PharmacyEntry.COLUMN_PRICE, priceProduct);
+
 
                     /*int listItemId = listItemView.get;*//*
 

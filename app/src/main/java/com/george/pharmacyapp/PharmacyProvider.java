@@ -306,10 +306,10 @@ public class PharmacyProvider extends ContentProvider {
         values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_IMAGE);*/
 
         // If there are no values to update, then don't try to update the database
-        if (values.size() == 0) {
+        /*if (values.size() == 0) {
             return 0;
-        }//**//**/
-        if (image.equals("") || quantity.equals("") || price.equals("") || name.equals("")) {
+        }*/
+        if ( quantity.equals("") || price.equals("") || name.equals("")) {
             return 0;
         }
         // Otherwise, get writeable database to update the data
