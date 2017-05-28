@@ -82,11 +82,11 @@ public class PharmacyCursorAdapter extends CursorAdapter {
                 // Show a toast message depending on whether or not the update was successful.
                 if (rowsAffected == 0) {
                     // If no rows were affected, then there was an error with the update.
-                    Toast.makeText(context, "faili",
+                    Toast.makeText(context, "Fail Updating Quantity",
                             Toast.LENGTH_SHORT).show();
                 } else {
                     // Otherwise, the update was successful and we can display a toast.
-                    Toast.makeText(context, "Success",
+                    Toast.makeText(context, "Success Updating Quantity",
                             Toast.LENGTH_SHORT).show();
                 }
 
