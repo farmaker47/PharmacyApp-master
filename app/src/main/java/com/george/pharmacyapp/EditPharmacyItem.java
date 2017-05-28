@@ -219,7 +219,7 @@ public class EditPharmacyItem extends AppCompatActivity implements LoaderManager
                 PharmacyContract.PharmacyEntry.COLUMN_IMAGE};
 
         return new CursorLoader(this,   // Parent activity context
-                mCurrentPharmacyUri,         // Query the content URI for the current pet
+                mCurrentPharmacyUri,         // Query the content URI for the current product
                 projection,             // Columns to include in the resulting Cursor
                 null,                   // No selection clause
                 null,                   // No selection arguments
