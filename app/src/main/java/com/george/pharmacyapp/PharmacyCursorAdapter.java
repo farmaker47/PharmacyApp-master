@@ -44,10 +44,23 @@ public class PharmacyCursorAdapter extends CursorAdapter {
         TextView price = (TextView) listItemView.findViewById(R.id.price);
         Button salesButton = (Button) listItemView.findViewById(R.id.salesButton);
 
+        //finding dummy views and store to variable
+        TextView dummyNameText = (TextView)listItemView.findViewById(R.id.dummyNameText);
+        TextView dummyPriceText = (TextView)listItemView.findViewById(R.id.dummyPriceText);
+        TextView dummyQuantityText = (TextView)listItemView.findViewById(R.id.dummyQuantityText);
+        TextView euro = (TextView)listItemView.findViewById(R.id.euro);
+
+
         //calling the cursor to fetch the data from the columns of the database
         final String nameProduct = cursor.getString(cursor.getColumnIndexOrThrow(PharmacyContract.PharmacyEntry.COLUMN_NAME));
         final String quantityProduct = cursor.getString(cursor.getColumnIndexOrThrow(PharmacyContract.PharmacyEntry.COLUMN_QUANTITY));
         final String priceProduct = cursor.getString(cursor.getColumnIndexOrThrow(PharmacyContract.PharmacyEntry.COLUMN_PRICE));
+
+        //Setting text to dummy textviews
+        dummyNameText.setText("Name:  ");
+        dummyPriceText.setText("Price:  ");
+        dummyQuantityText.setText("Quantity:  ");
+        euro.setText(" €");
 
         //seting the text to the views..
         //Because atthe MainActivity we dont have an ImageView in the list item,we dont use one here
