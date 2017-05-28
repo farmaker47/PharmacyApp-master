@@ -58,14 +58,15 @@ public class PharmacyCursorAdapter extends CursorAdapter {
             public void onClick(View view) {
                 ////////////////////////////////*Log.e("ButtonSales","Success");*/
                 int quantityReduced = Integer.parseInt(quantityProduct);
+                int quaReduced = 0;
                 if (quantityReduced > 0) {
-
-                    quantityReduced -= 1;
+                    
+                    quaReduced = quantityReduced - 1;
                 }
 
 
                 ContentValues values = new ContentValues();
-                values.put(PharmacyContract.PharmacyEntry.COLUMN_QUANTITY, quantityReduced);
+                values.put(PharmacyContract.PharmacyEntry.COLUMN_QUANTITY, quaReduced);
 
                     /*int listItemId = listItemView.get;*//*
 
@@ -81,7 +82,7 @@ public class PharmacyCursorAdapter extends CursorAdapter {
                 // Show a toast message depending on whether or not the update was successful.
                 if (rowsAffected == 0) {
                     // If no rows were affected, then there was an error with the update.
-                    Toast.makeText(context, "fail",
+                    Toast.makeText(context, "faili",
                             Toast.LENGTH_SHORT).show();
                 } else {
                     // Otherwise, the update was successful and we can display a toast.

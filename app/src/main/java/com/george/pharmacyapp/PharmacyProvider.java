@@ -77,7 +77,7 @@ public class PharmacyProvider extends ContentProvider {
         Cursor cursor = null;
 
         int match = sUriMatcher.match(uri);
-        switch (match){
+        switch (match) {
             case PRODUCT:
                 cursor = database.query(
                         PharmacyContract.PharmacyEntry.TABLE_NAME,   // The table to query
@@ -90,7 +90,7 @@ public class PharmacyProvider extends ContentProvider {
                 break;
             case PRODUCT_ID:
                 selection = PharmacyContract.PharmacyEntry._ID + "=?";
-                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
 
                 // This will perform a query on the pets table where the _id equals 3 to return a
                 // Cursor containing that row of the table.
@@ -98,11 +98,11 @@ public class PharmacyProvider extends ContentProvider {
                         null, null, sortOrder);
                 break;
             default:
-                throw new IllegalArgumentException("cannot query unknown "+ uri);
+                throw new IllegalArgumentException("cannot query unknown " + uri);
         }
 
         //if the uri changes,we know we have to update cursor
-        cursor.setNotificationUri(getContext().getContentResolver(),uri);
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
 
         return cursor;
     }
@@ -133,24 +133,24 @@ public class PharmacyProvider extends ContentProvider {
         String name = values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_NAME);
         if (name.equals("")) {
             /*throw new IllegalArgumentException("Product requires a name");*/
-            Toast.makeText(getContext(),"No Name",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "No Name", Toast.LENGTH_SHORT).show();
 
         }
 
         String price = values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_PRICE);
         if (price.equals("")) {
-            Toast.makeText(getContext(),"No Price",Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "No Price", Toast.LENGTH_LONG).show();
 
         }
 
         String quantity = values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_QUANTITY);
         if (quantity.equals("")) {
-            Toast.makeText(getContext(),"No Quantity",Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "No Quantity", Toast.LENGTH_LONG).show();
         }
 
         String image = values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_IMAGE);
         if (image.equals("")) {
-            Toast.makeText(getContext(),"No Image",Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "No Image", Toast.LENGTH_LONG).show();
         }
 
         if (image.equals("") || quantity.equals("") || price.equals("") || name.equals("")) {
@@ -189,7 +189,8 @@ public class PharmacyProvider extends ContentProvider {
                 // If 1 or more rows were deleted, then notify all listeners that the data at the
                 // given URI has changed
                 if (rowsDeleted != 0) {
-                    getContext().getContentResolver().notifyChange(uri, null);}
+                    getContext().getContentResolver().notifyChange(uri, null);
+                }
 
                 return rowsDeleted;
             case PRODUCT_ID:
@@ -202,7 +203,8 @@ public class PharmacyProvider extends ContentProvider {
                 // If 1 or more rows were deleted, then notify all listeners that the data at the
                 // given URI has changed
                 if (rowsDeleted != 0) {
-                    getContext().getContentResolver().notifyChange(uri, null);}
+                    getContext().getContentResolver().notifyChange(uri, null);
+                }
 
                 return rowsDeleted;
             default:
@@ -221,7 +223,7 @@ public class PharmacyProvider extends ContentProvider {
                 // so we know which row to update. Selection will be "_id=?" and selection
                 // arguments will be a String array containing the actual ID.
                 selection = PharmacyContract.PharmacyEntry._ID + "=?";
-                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 return updateProduct(uri, contentValues, selection, selectionArgs);
             default:
                 throw new IllegalArgumentException("Update is not supported for " + uri);
@@ -236,42 +238,80 @@ public class PharmacyProvider extends ContentProvider {
      */
     private int updateProduct(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
 
+
+        ///working with no sanity
+        /*values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_NAME);
+        values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_QUANTITY);
+        values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_PRICE);
+        values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_IMAGE);
+
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+
+        // Perform the update on the database and get the number of rows affected
+        int rowsUpdated = database.update(PharmacyContract.PharmacyEntry.TABLE_NAME, values, selection, selectionArgs);
+
+        // If 1 or more rows were updated, then notify all listeners that the data at the
+        // given URI has changed
+        if (rowsUpdated != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+
+
+        // Returns the number of database rows affected by the update statement
+        return rowsUpdated;*/
+
+
+        ///////////////////////////
+        ///////////////////////////
+        //////////////////////////
+
+
+        String name = "";
+        String quantity = "";
+        String price = "";
+        String image = "";
+
         // If the {@link PetEntry#COLUMN_PET_NAME} key is present,
         // check that the name value is not null.
-        /*if (values.containsKey(PetContract.PetEntry.COLUMN_PET_NAME)) {
-            String name = values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_NAME);
-            if (name == null) {
-                throw new IllegalArgumentException("Pet requires a name");
-            }
-        }*/
-        String name = values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_NAME);
-        String quantity = values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_QUANTITY);
-        String price = values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_PRICE);
-        String image = values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_IMAGE);
-
-        // If the {@link PetEntry#COLUMN_PET_GENDER} key is present,
-        // check that the gender value is valid.
-        /*if (values.containsKey(PetContract.PetEntry.COLUMN_PET_GENDER)) {
-            Integer gender = values.getAsInteger(PetContract.PetEntry.COLUMN_PET_GENDER);
-            if (gender == null || !PetContract.PetEntry.isValidGender(gender)) {
-                throw new IllegalArgumentException("Pet requires valid gender");
-            }
-        }*/
-
-        // If the {@link PetEntry#COLUMN_PET_WEIGHT} key is present,
-        // check that the weight value is valid.
-       /* if (values.containsKey(PetContract.PetEntry.COLUMN_PET_WEIGHT)) {
-            // Check that the weight is greater than or equal to 0 kg
-            Integer weight = values.getAsInteger(PetContract.PetEntry.COLUMN_PET_WEIGHT);
-            if (weight != null && weight < 0) {
-                throw new IllegalArgumentException("Pet requires valid weight");
+        if (values.containsKey(PharmacyContract.PharmacyEntry.COLUMN_NAME)) {
+            name = values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_NAME);
+            if (name.equals("")) {
+                Toast.makeText(getContext(), "No Nami", Toast.LENGTH_SHORT).show();
             }
         }
+
+        if (values.containsKey(PharmacyContract.PharmacyEntry.COLUMN_PRICE)) {
+            price = values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_PRICE);
+            if (price.equals("")) {
+                Toast.makeText(getContext(), "No Prici", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        if (values.containsKey(PharmacyContract.PharmacyEntry.COLUMN_QUANTITY)) {
+            quantity = values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_QUANTITY);
+            if (quantity.equals("")) {
+                Toast.makeText(getContext(), "No quantiti", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        if (values.containsKey(PharmacyContract.PharmacyEntry.COLUMN_IMAGE)) {
+            image = values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_IMAGE);
+            if (image.equals("")) {
+                Toast.makeText(getContext(), "No Imagi", Toast.LENGTH_SHORT).show();
+            }
+        }
+       /* values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_NAME);
+        values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_QUANTITY);
+        values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_PRICE);
+        values.getAsString(PharmacyContract.PharmacyEntry.COLUMN_IMAGE);*/
+
         // If there are no values to update, then don't try to update the database
         if (values.size() == 0) {
             return 0;
-        }*/
-
+        }//**//**/
+        if (image.equals("") || quantity.equals("") || price.equals("") || name.equals("")) {
+            return 0;
+        }
         // Otherwise, get writeable database to update the data
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
 
@@ -287,6 +327,7 @@ public class PharmacyProvider extends ContentProvider {
 
         // Returns the number of database rows affected by the update statement
         return rowsUpdated;
+
     }
 
 
