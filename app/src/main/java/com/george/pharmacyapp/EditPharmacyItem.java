@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -62,6 +63,9 @@ public class EditPharmacyItem extends AppCompatActivity implements LoaderManager
 
     //Global private strings
     private String editName, editPrice, editQuantity, editImage;
+
+    //String to use it on onsaveinstant state of the image
+    private static final String STATE_URI = "STATE_URI";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -204,6 +208,34 @@ public class EditPharmacyItem extends AppCompatActivity implements LoaderManager
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    //Saving the instance state of the image
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        if (imageUri != null)
+            outState.putString(STATE_URI, imageUri.toString());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        if (savedInstanceState.containsKey(STATE_URI) &&
+                !savedInstanceState.getString(STATE_URI).equals("")) {
+            imageUri = Uri.parse(savedInstanceState.getString(STATE_URI));
+
+            ViewTreeObserver viewTreeObserver = mImage.getViewTreeObserver();
+            viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    mImage.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    mImage.setImageBitmap(getBitmapFromUri(imageUri));
+                }
+            });
+        }
     }
 
     //Starting the loader
