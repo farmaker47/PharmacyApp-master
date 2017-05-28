@@ -30,4 +30,6 @@
     <string name="requiresQuantity">Product requires quantity</string>
     <string name="requiresImage">Product requires image</string>
 
+    <string name="salesOrIncoming">Sale or Incoming shipment</string>
+
 </resources>

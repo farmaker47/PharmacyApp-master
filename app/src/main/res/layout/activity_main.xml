@@ -25,7 +25,7 @@
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="55dp"
+        android:layout_marginTop="@dimen/listTop"
         android:divider="@null"
         android:dividerHeight="0dp">
 
@@ -39,13 +39,13 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="@dimen/imageSizeList"
+            android:layout_height="@dimen/imageSizeList"
             android:src="@drawable/pharmacycross" />
 
         <TextView
             android:id="@+id/empty_title_text"
-            android:layout_width="150dp"
+            android:layout_width="@dimen/imageSizeList"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:fontFamily="sans-serif-medium"
